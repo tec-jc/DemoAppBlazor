@@ -1,0 +1,51 @@
+﻿@page "/departamentos"
+@using Models
+@using Services
+@inject IDepartamentoService DepartamentoService
+
+<MudText Typo="Typo.h3">Departamentos</MudText>
+
+<MudGrid>
+    @foreach (var item in deptos)
+    {
+        string zona = "";
+        <MudItem xs="12" sm="10" md="6" lg="4">
+            <MudCard>
+                <MudCardHeader Class="blue darken-1">
+                    <CardHeaderContent>
+                        <MudText Typo="Typo.h6">@item.Nombre</MudText>
+                    </CardHeaderContent>
+                </MudCardHeader>
+                <MudCardContent>
+                    @switch (item.Zona)
+                    {
+                        case 1:
+                            zona = "Occidental";
+                            break;
+                        case 2:
+                            zona = "Central";
+                            break;
+                        case 3:
+                            zona = "Oriental";
+                            break;
+
+                    }
+                    <MudText Typo="Typo.body2">Zona: @zona</MudText>
+
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton Link="@($"/munixdepto/{item.Id}")" Variant="Variant.Outlined" Color="Color.Tertiary"
+                               Class="text-center">Ver municipios</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+    }
+</MudGrid>
+
+@code {
+    IEnumerable<Departamento> deptos = new List<Departamento>();
+    protected override async Task OnInitializedAsync()
+    {
+        deptos = await DepartamentoService.GetAll();
+    }
+}
